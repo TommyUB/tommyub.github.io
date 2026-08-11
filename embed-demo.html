@@ -166,13 +166,14 @@ function createPost() {
     post.className = 'post';
 
     // The text on the post remains exactly what the user typed (retains the original URL text)
+    var embedUrl = extractVideoEmbed(text);    
     var postTextDiv = document.createElement('div');
     postTextDiv.className = 'post-text';
     //postTextDiv.textContent = text;
-    postTextDiv.textContent = embedUrl ? text.replace(text.substring(text.indexOf(
+    postTextDiv.textContent = embedUrl ? text.replace(text.substring(text.indexOf("http"), text.search(/[\s"'>]/) !== -1 ? text.indexOf("http") + text.substring(text.indexOf("http")).search(/[\s"'>]/) : text.length), "").trim() : text;
     post.appendChild(postTextDiv);
 
-    var embedUrl = extractVideoEmbed(text);
+    //var embedUrl = extractVideoEmbed(text);
     if (embedUrl) {
         var videoContainer = document.createElement('div');
         videoContainer.className = 'video-container';
