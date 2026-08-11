@@ -125,7 +125,7 @@ function extractVideoEmbed(text) {
         }
     }
 
-    // 2. YouTube Mobile Share Link Fix (Converts youtu.be/ to youtube.com/embed/)
+    // 2. YouTube Mobile Share Link Fix (Converts youtu.be/ to ://youtube.com)
     if (text.includes("youtu.be/")) {
         var startIndex = text.indexOf("http");
         if (startIndex !== -1) {
@@ -133,9 +133,10 @@ function extractVideoEmbed(text) {
             var endIndex = remainingText.search(/[\s"'>]/);
             var cleanUrl = endIndex !== -1 ? remainingText.substring(0, endIndex) : remainingText;
             
-            // Extract the 11-character video ID after the slash
-            var videoId = cleanUrl.split("youtu.be/").pop().split("?")[0].trim();
-            return "https://youtube.com" + videoId;
+            // Extract the 11-character video ID after the slash and handle trailing parameters cleanly
+            var videoIdPart = cleanUrl.split("youtu.be/").pop();
+            var videoId = videoIdPart.split("?")[0].trim();
+            return "https://www.://youtube.com" + videoId;
         }
     }
 
@@ -147,9 +148,10 @@ function extractVideoEmbed(text) {
             var endIndex = remainingText.search(/[\s"'>]/);
             var cleanUrl = endIndex !== -1 ? remainingText.substring(0, endIndex) : remainingText;
             
-            // Extract the video ID after the v= parameter
-            var videoId = cleanUrl.split("v=").pop().split("&")[0].trim();
-            return "https://youtube.com" + videoId;
+            // Extract the video ID after the v= parameter and isolate it from secondary URL arguments
+            var videoIdPart = cleanUrl.split("v=").pop();
+            var videoId = videoIdPart.split("&")[0].trim();
+            return "https://www.://youtube.com" + videoId;
         }
     }
 
