@@ -157,49 +157,7 @@ function extractVideoEmbed(text) {
     return null;
 }
 
-// Added 'async' so this function can wait for Rumble's data
-async function createPost() {
-    var textarea = document.getElementById('postText');
-    var text = textarea.value.trim();
-    if (!text) return;
 
-    var feed = document.getElementById('postFeed');
-    var post = document.createElement('div');
-    post.className = 'post';
-
-    var postTextDiv = document.createElement('div');
-    postTextDiv.className = 'post-text';
-    postTextDiv.textContent = text;
-    post.appendChild(postTextDiv);
-
-    var embedUrl = null;
-
-    // A. Check if this is a standard Rumble link lacking "embed"
-    if (text.includes("rumble.com") && !text.includes("embed")) {
-        var startIndex = text.indexOf("http");
-        if (startIndex !== -1) {
-            var remainingText = text.substring(startIndex);
-            var endIndex = remainingText.search(/[\s"'>]/);
-            var cleanUrl = endIndex !== -1 ? remainingText.substring(0, endIndex) : remainingText;
-            
-            try {
-                // Fetch the API data using the URL you tested
-                var apiUrl = "https://rumble.com/" + encodeURIComponent(cleanUrl);
-                var response = await fetch(apiUrl);
-                var data = await response.json();
-                
-                // Pull the hidden iframe src URL directly out of the "html" property
-                var match = data.html.match(/src="([^"]+)"/);
-                if (match && match[1]) {
-                    embedUrl = match[1];
-                }
-                alert("succeed");
-            } catch (error) {
-                alert("fail " + remainintText);
-                console.error("Failed to fetch Rumble video data:", error);
-            }
-        }
-    }
 
     // B. If it wasn't a standard Rumble link, run your original extraction rules
     if (!embedUrl) {
