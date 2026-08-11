@@ -131,7 +131,7 @@ function extractVideoEmbed(text) {
     }
 
     // 0B. Odysee Standard Watch Link Catch
-    if (text.includes("odysee.com/") && !text.includes("/$/embed/")) {
+    if (text.includes("odysee.com/") && !text.includes("/embed/")) {
         var startIndex = text.indexOf("http");
         if (startIndex !== -1) {
             var remainingText = text.substring(startIndex);
