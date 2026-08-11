@@ -126,6 +126,7 @@ function extractVideoEmbed(text) {
             if (urlParts.length > 1) {
                 var videoId = urlParts[1].split("/")[0].trim();
                 console.log("My extracted videoId is:", videoId);
+                alert("The videoId is: " + videoId);    
                 return "https://rumble.com/embed/" + videoId;
             }
         }
