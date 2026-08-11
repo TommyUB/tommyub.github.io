@@ -152,7 +152,20 @@ function extractVideoEmbed(text) {
             return "https://youtube.com/embed/" + videoId;
         }
     }
-
+    if (text.includes("odysee.com/") && !text.includes("/$/embed/")) {
+        var startIndex = text.indexOf("http");
+        if (startIndex !== -1) {
+            var remainingText = text.substring(startIndex);
+            var endIndex = remainingText.search(/[\s"'>]/);
+            var cleanUrl = endIndex !== -1 ? remainingText.substring(0, endIndex) : remainingText;
+            
+            // Isolate the full video pathway string following odysee.com/
+            var videoPath = cleanUrl.split("odysee.com/").pop().split("?")[0].trim();
+            
+            // Combine it with Odysee's required player path prefix
+            return "https://odysee.com" + videoPath;
+        }
+    }
     return null;
 }
 
