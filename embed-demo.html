@@ -113,18 +113,19 @@
 <script>
 function extractVideoEmbed(text) {
     // 1. Direct Embed Link Catch (If they paste a raw /embed/ link)
-    if (text.includes("/")) {
+
+if (text.includes("://rumble.com/")) {
         var startIndex = text.indexOf("http");
         if (startIndex !== -1) {
             var remainingText = text.substring(startIndex);
             var endIndex = remainingText.search(/[\s"'>]/);
-            if (endIndex !== -1) {
-                return remainingText.substring(0, endIndex);
-            }
-            return remainingText;
+            var cleanUrl = endIndex !== -1 ? remainingText.substring(0, endIndex) : remainingText;
+            
+            // Extract the video ID after the v= parameter
+            var videoId = cleanUrl.split("v=").pop().split("&")[0].trim();
+            return "https://rumble.com/" + cleanUrl;
         }
     }
-
     // 2. YouTube Mobile Share Link Fix (Converts youtu.be/ to youtube.com/embed/)
     if (text.includes("youtu.be/")) {
         var startIndex = text.indexOf("http");
