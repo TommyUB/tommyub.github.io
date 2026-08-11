@@ -124,8 +124,8 @@ function extractVideoEmbed(text) {
             // Extracts the unique alphanumeric video ID key string directly following rumble.com/
             var urlParts = cleanUrl.split("rumble.com/");
             if (urlParts.length > 1) {
-                var videoId = urlParts[1].split("-")[0].trim();
-                return "https://rumble.com/" + videoId;
+                var videoId = urlParts[1].split("/")[0].trim();
+                return "https://rumble.com/embed/" + videoId;
             }
         }
     }
