@@ -163,7 +163,7 @@ function extractVideoEmbed(text) {
             var videoPath = cleanUrl.split("odysee.com/").pop().split("?")[0].trim();
             
             // Combine it with Odysee's required player path prefix
-            return "https://odysee.com/" + videoPath;
+            return "https://odysee.com/$/" + videoPath;
         }
     }
     return null;
