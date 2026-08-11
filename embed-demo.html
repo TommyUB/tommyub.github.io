@@ -148,7 +148,7 @@ function extractVideoEmbed(text) {
             
             // Extract the 11-character video ID after the slash
             var videoId = cleanUrl.split("youtu.be/").pop().split("?")[0].trim();
-            return "https://youtube.com/" + videoId;
+            return "https://youtube.com/embed/" + videoId;
         }
     }
 
@@ -162,7 +162,7 @@ function extractVideoEmbed(text) {
             
             // Extract the video ID after the v= parameter
             var videoId = cleanUrl.split("v=").pop().split("&")[0].trim();
-            return "https://youtube.com/" + videoId;
+            return "https://youtube.com/embed/" + videoId;
         }
     }
 
