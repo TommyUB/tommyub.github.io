@@ -125,7 +125,7 @@ function extractVideoEmbed(text) {
             var urlParts = cleanUrl.split("rumble.com/");
             if (urlParts.length > 1) {
                 var videoId = urlParts[1].split("-")[0].trim();
-                return "https://rumble.com/embed/" + videoId;
+                return "https://rumble.com/" + videoId;
             }
         }
     }
@@ -142,7 +142,7 @@ function extractVideoEmbed(text) {
             var urlParts = cleanUrl.split("odysee.com/");
             if (urlParts.length > 1) {
                 var videoPath = urlParts[1].trim();
-                return "https://odysee.com" + videoPath;
+                return "https://odysee.com/" + videoPath;
             }
         }
     }
