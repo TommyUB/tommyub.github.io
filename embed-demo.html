@@ -112,7 +112,6 @@
 
 <script>
 function extractVideoEmbed(text) {
-
     // 1. Direct Embed Link Catch (If they paste a raw /embed/ link)
     if (text.includes("/embed/")) {
         var startIndex = text.indexOf("http");
@@ -126,8 +125,8 @@ function extractVideoEmbed(text) {
         }
     }
 
-    // 2. YouTube Mobile Share Link Fix (Converts youtu.be/ to ://youtube.com)
-    if (text.includes("://youtu.be/")) {
+    // 2. YouTube Mobile Share Link Fix (Converts youtu.be/ to youtube.com/embed/)
+    if (text.includes("youtu.be/")) {
         var startIndex = text.indexOf("http");
         if (startIndex !== -1) {
             var remainingText = text.substring(startIndex);
@@ -136,12 +135,12 @@ function extractVideoEmbed(text) {
             
             // Extract the 11-character video ID after the slash
             var videoId = cleanUrl.split("youtu.be/").pop().split("?")[0].trim();
-            return "https://youtube.com" + videoId;
+            return "https://youtube.com/embed/" + videoId;
         }
     }
 
     // 3. YouTube Standard Watch Link Fix (Converts watch?v= to /embed/)
-    if (text.includes("://youtube.com")) {
+    if (text.includes("://youtube.com/embed/")) {
         var startIndex = text.indexOf("http");
         if (startIndex !== -1) {
             var remainingText = text.substring(startIndex);
@@ -150,20 +149,29 @@ function extractVideoEmbed(text) {
             
             // Extract the video ID after the v= parameter
             var videoId = cleanUrl.split("v=").pop().split("&")[0].trim();
-            return "https://youtube.com" + videoId;
+            return "https://youtube.com/embed/" + videoId;
         }
     }
 
     return null;
 }
 
+function createPost() {
+    var textarea = document.getElementById('postText');
+    var text = textarea.value.trim();
+    if (!text) return;
 
+    var feed = document.getElementById('postFeed');
+    var post = document.createElement('div');
+    post.className = 'post';
 
-    // B. If it wasn't a standard Rumble link, run your original extraction rules
-    if (!embedUrl) {
-        embedUrl = extractVideoEmbed(text);
-    }
+    // The text on the post remains exactly what the user typed (retains the original URL text)
+    var postTextDiv = document.createElement('div');
+    postTextDiv.className = 'post-text';
+    postTextDiv.textContent = text;
+    post.appendChild(postTextDiv);
 
+    var embedUrl = extractVideoEmbed(text);
     if (embedUrl) {
         var videoContainer = document.createElement('div');
         videoContainer.className = 'video-container';
