@@ -184,7 +184,7 @@ async function createPost() {
             
             try {
                 // Fetch the API data using the URL you tested
-                var apiUrl = "https://rumble.com" + encodeURIComponent(cleanUrl);
+                var apiUrl = "https://rumble.com/" + encodeURIComponent(cleanUrl);
                 var response = await fetch(apiUrl);
                 var data = await response.json();
                 
