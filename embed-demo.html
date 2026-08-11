@@ -170,7 +170,21 @@ function createPost() {
     var postTextDiv = document.createElement('div');
     postTextDiv.className = 'post-text';
     //postTextDiv.textContent = text;
-    postTextDiv.textContent = embedUrl ? text.replace(text.substring(text.indexOf("http"), text.search(/[\s"'>]/) !== -1 ? text.indexOf("http") + text.substring(text.indexOf("http")).search(/[\s"'>]/) : text.length), "").trim() : text;
+    if (embedUrl) {
+        // Find the exact web link inside the text box (starts at http)
+        var linkStart = text.indexOf("http");
+        var remainingFromLink = text.substring(linkStart);
+        var linkEndRelative = remainingFromLink.search(/[\s"'>]/);
+        
+        // Isolate the exact URL string that the user pasted
+        var rawUserUrl = linkEndRelative !== -1 ? remainingFromLink.substring(0, linkEndRelative) : remainingFromLink;
+        
+        // Erase just that raw URL from the post text, keeping all other typed comments
+        postTextDiv.textContent = text.replace(rawUserUrl, "").trim();
+    } else {
+        // If there's no video embed, just display the user's plain text post normally
+        postTextDiv.textContent = text;
+    }
     post.appendChild(postTextDiv);
 
     //var embedUrl = extractVideoEmbed(text);
