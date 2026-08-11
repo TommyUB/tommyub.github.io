@@ -113,6 +113,39 @@
 <script>
 function extractVideoEmbed(text) {
 
+    // 0A. Rumble Standard Watch Link Catch
+    if (text.includes("rumble.com/") && !text.includes("/embed/")) {
+        var startIndex = text.indexOf("http");
+        if (startIndex !== -1) {
+            var remainingText = text.substring(startIndex);
+            var endIndex = remainingText.search(/[\s"'>]/);
+            var cleanUrl = endIndex !== -1 ? remainingText.substring(0, endIndex) : remainingText;
+            
+            // Extracts the unique alphanumeric video ID key string directly following rumble.com/
+            var urlParts = cleanUrl.split("rumble.com/");
+            if (urlParts.length > 1) {
+                var videoId = urlParts[1].split("-")[0].trim();
+                return "https://rumble.com/embed/" + videoId + "/";
+            }
+        }
+    }
+
+    // 0B. Odysee Standard Watch Link Catch
+    if (text.includes("odysee.com/") && !text.includes("/$/embed/")) {
+        var startIndex = text.indexOf("http");
+        if (startIndex !== -1) {
+            var remainingText = text.substring(startIndex);
+            var endIndex = remainingText.search(/[\s"'>]/);
+            var cleanUrl = endIndex !== -1 ? remainingText.substring(0, endIndex) : remainingText;
+            
+            // Captures the unique user handle and specific resource file target string
+            var urlParts = cleanUrl.split("odysee.com/");
+            if (urlParts.length > 1) {
+                var videoPath = urlParts[1].trim();
+                return "https://odysee.com" + videoPath;
+            }
+        }
+    }
 
     // 1. Direct Embed Link Catch (If they paste a raw /embed/ link)
     if (text.includes("/embed/")) {
