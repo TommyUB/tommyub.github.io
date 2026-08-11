@@ -112,18 +112,7 @@
 
 <script>
 function extractVideoEmbed(text) {
-    // 0. Rumble Exception Catch (Catches rumble.com links that don't rely on /embed/)
-    if (text.includes("rumble.com")) {
-        var startIndex = text.indexOf("http");
-        if (startIndex !== -1) {
-            var remainingText = text.substring(startIndex);
-            var endIndex = remainingText.search(/[\s"'>]/);
-            if (endIndex !== -1) {
-                return remainingText.substring(0, endIndex);
-            }
-            return remainingText;
-        }
-    }
+
 
     // 1. Direct Embed Link Catch (If they paste a raw /embed/ link)
     if (text.includes("/embed/")) {
@@ -139,7 +128,7 @@ function extractVideoEmbed(text) {
     }
 
     // 2. YouTube Mobile Share Link Fix (Converts youtu.be/ to ://youtube.com)
-    if (text.includes("youtu.be/")) {
+    if (text.includes("://youtu.be/")) {
         var startIndex = text.indexOf("http");
         if (startIndex !== -1) {
             var remainingText = text.substring(startIndex);
@@ -153,7 +142,7 @@ function extractVideoEmbed(text) {
     }
 
     // 3. YouTube Standard Watch Link Fix (Converts watch?v= to /embed/)
-    if (text.includes("://://youtube.com")) {
+    if (text.includes("://youtube.com")) {
         var startIndex = text.indexOf("http");
         if (startIndex !== -1) {
             var remainingText = text.substring(startIndex);
