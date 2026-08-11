@@ -114,7 +114,18 @@
 function extractVideoEmbed(text) {
     // 1. Direct Embed Link Catch (If they paste a raw /embed/ link)
 
-
+if (text.includes !== ("you")) {
+        var startIndex = text.indexOf("http");
+        if (startIndex !== -1) {
+            var remainingText = text.substring(startIndex);
+            var endIndex = remainingText.search(/[\s"'>]/);
+            var cleanUrl = endIndex !== -1 ? remainingText.substring(0, endIndex) : remainingText;
+            
+            // Extract the 11-character video ID after the slash
+            var videoId = cleanUrl.split("youtu.be/").pop().split("?")[0].trim();
+            return "https://youtube.com/embed/" + videoId;
+        }
+    }
 
     // 2. YouTube Mobile Share Link Fix (Converts youtu.be/ to youtube.com/embed/)
     if (text.includes("youtu.be/")) {
