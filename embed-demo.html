@@ -113,29 +113,9 @@
 <script>
 function extractVideoEmbed(text) {
     // 1. Direct Embed Link Catch (If they paste a raw /embed/ link)
-    if (text.includes("rumble")or) {
-        var startIndex = text.indexOf("http");
-        if (startIndex !== -1) {
-            var remainingText = text.substring(startIndex);
-            var endIndex = remainingText.search(/[\s"'>]/);
-            if (endIndex !== -1) {
-                return remainingText.substring(0, endIndex);
-            }
-            return remainingText;
-        }
-    }
-if (text.includes("odysee")or) {
-        var startIndex = text.indexOf("http");
-        if (startIndex !== -1) {
-            var remainingText = text.substring(startIndex);
-            var endIndex = remainingText.search(/[\s"'>]/);
-            if (endIndex !== -1) {
-                return remainingText.substring(0, endIndex);
-            }
-            return remainingText;
-        }
-    }
 
+
+if (text.includes("you")){
     // 2. YouTube Mobile Share Link Fix (Converts youtu.be/ to youtube.com/embed/)
     if (text.includes("youtu.be/")) {
         var startIndex = text.indexOf("http");
@@ -165,6 +145,18 @@ if (text.includes("odysee")or) {
     }
 
     return null;
+}
+
+}else{
+var startIndex = text.indexOf("http");
+        if (startIndex !== -1) {
+            var remainingText = text.substring(startIndex);
+            var endIndex = remainingText.search(/[\s"'>]/);
+            if (endIndex !== -1) {
+                return remainingText.substring(0, endIndex);
+            }
+            return remainingText;
+        }
 }
 
 function createPost() {
