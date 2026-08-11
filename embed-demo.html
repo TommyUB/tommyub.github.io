@@ -111,10 +111,8 @@
 </div>
 
 <script>
-// DEMO VERSION: Revision 1.0
-
 function extractVideoEmbed(text) {
-    // Standardize the text by replacing regular share links with the embed structure first
+    // 1. Convert standard share links to embed style paths first
     if (text.includes("youtu.be/")) {
         text = text.replace("youtu.be/", "://youtube.com");
     }
@@ -122,13 +120,13 @@ function extractVideoEmbed(text) {
         text = text.replace("://youtube.com", "://youtube.com");
     }
 
-    // Now use the exact simple loop that worked perfectly for you earlier
+    // 2. Extract the clean URL from the text string or iframe code block
     if (text.includes("/embed/")) {
         var startIndex = text.indexOf("http");
         if (startIndex !== -1) {
             var remainingText = text.substring(startIndex);
             
-            // Stops perfectly at a space, quote, or bracket so the slash stays intact
+            // Stops perfectly at spaces, quote marks, brackets, or tracking parameters
             var endIndex = remainingText.search(/[\s"'>&?]/);
             
             if (endIndex !== -1) {
@@ -150,6 +148,7 @@ function createPost() {
     var post = document.createElement('div');
     post.className = 'post';
 
+    // The text display remains exactly what the user typed into the box
     var postTextDiv = document.createElement('div');
     postTextDiv.className = 'post-text';
     postTextDiv.textContent = text;
@@ -172,14 +171,6 @@ function createPost() {
     feed.insertBefore(post, feed.firstChild);
     textarea.value = '';
 }
-
-// Add visible revision tracking to the UI so you can confirm updates instantly
-window.onload = function() {
-    var heading = document.querySelector('h2');
-    if (heading) {
-        heading.insertAdjacentHTML('afterend', '<p style="color: #65676b; font-size: 13px; font-weight: bold; margin-top: -10px;">UI Version: Revision 1.0</p>');
-    }
-};
 </script>
 
 </body>
