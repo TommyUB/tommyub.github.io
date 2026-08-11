@@ -112,21 +112,33 @@
 
 <script>
 function extractVideoEmbed(text) {
-    // 1. Direct Embed Link Catch (If they paste a raw /embed/ link)
-
-if (text.includes("://rumble.com/")) {
+    // 0. Rumble Exception Catch (Catches rumble.com links that don't rely on /embed/)
+    if (text.includes("rumble.com")) {
         var startIndex = text.indexOf("http");
         if (startIndex !== -1) {
             var remainingText = text.substring(startIndex);
             var endIndex = remainingText.search(/[\s"'>]/);
-            var cleanUrl = endIndex !== -1 ? remainingText.substring(0, endIndex) : remainingText;
-            
-            // Extract the video ID after the v= parameter
-            var videoId = cleanUrl.split("v=").pop().split("&")[0].trim();
-            return "https://rumble.com/" + cleanUrl;
+            if (endIndex !== -1) {
+                return remainingText.substring(0, endIndex);
+            }
+            return remainingText;
         }
     }
-    // 2. YouTube Mobile Share Link Fix (Converts youtu.be/ to youtube.com/embed/)
+
+    // 1. Direct Embed Link Catch (If they paste a raw /embed/ link)
+    if (text.includes("/embed/")) {
+        var startIndex = text.indexOf("http");
+        if (startIndex !== -1) {
+            var remainingText = text.substring(startIndex);
+            var endIndex = remainingText.search(/[\s"'>]/);
+            if (endIndex !== -1) {
+                return remainingText.substring(0, endIndex);
+            }
+            return remainingText;
+        }
+    }
+
+    // 2. YouTube Mobile Share Link Fix (Converts youtu.be/ to ://youtube.com)
     if (text.includes("youtu.be/")) {
         var startIndex = text.indexOf("http");
         if (startIndex !== -1) {
@@ -136,12 +148,12 @@ if (text.includes("://rumble.com/")) {
             
             // Extract the 11-character video ID after the slash
             var videoId = cleanUrl.split("youtu.be/").pop().split("?")[0].trim();
-            return "https://youtube.com/embed/" + videoId;
+            return "https://://youtube.com" + videoId;
         }
     }
 
     // 3. YouTube Standard Watch Link Fix (Converts watch?v= to /embed/)
-    if (text.includes("://youtube.com/embed/")) {
+    if (text.includes("://://youtube.com")) {
         var startIndex = text.indexOf("http");
         if (startIndex !== -1) {
             var remainingText = text.substring(startIndex);
@@ -157,9 +169,6 @@ if (text.includes("://rumble.com/")) {
     return null;
 }
 
-
-
-
 function createPost() {
     var textarea = document.getElementById('postText');
     var text = textarea.value.trim();
@@ -169,7 +178,6 @@ function createPost() {
     var post = document.createElement('div');
     post.className = 'post';
 
-    // The text on the post remains exactly what the user typed (retains the original URL text)
     var postTextDiv = document.createElement('div');
     postTextDiv.className = 'post-text';
     postTextDiv.textContent = text;
