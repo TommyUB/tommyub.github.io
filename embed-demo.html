@@ -112,30 +112,47 @@
 
 <script>
 function extractVideoEmbed(text) {
-    // 1. Convert standard share links to embed style paths first
-    if (text.includes("youtu.be/")) {
-        text = text.replace("youtu.be/", "://youtube.com");
-    }
-    if (text.includes("://youtube.com")) {
-        text = text.replace("://youtube.com", "://youtube.com");
-    }
-
-    // 2. Extract the clean URL from the text string or iframe code block
+    // 1. Direct Embed Link Catch (If they paste a raw /embed/ link)
     if (text.includes("/embed/")) {
         var startIndex = text.indexOf("http");
         if (startIndex !== -1) {
             var remainingText = text.substring(startIndex);
-            
-            // Stops perfectly at spaces, quote marks, brackets, or tracking parameters
-            var endIndex = remainingText.search(/[\s"'>&?]/);
-            
+            var endIndex = remainingText.search(/[\s"'>]/);
             if (endIndex !== -1) {
                 return remainingText.substring(0, endIndex);
-            } else {
-                return remainingText;
             }
+            return remainingText;
         }
     }
+
+    // 2. YouTube Mobile Share Link Fix (Converts youtu.be/ to youtube.com/embed/)
+    if (text.includes("youtu.be/")) {
+        var startIndex = text.indexOf("http");
+        if (startIndex !== -1) {
+            var remainingText = text.substring(startIndex);
+            var endIndex = remainingText.search(/[\s"'>]/);
+            var cleanUrl = endIndex !== -1 ? remainingText.substring(0, endIndex) : remainingText;
+            
+            // Extract the 11-character video ID after the slash
+            var videoId = cleanUrl.split("youtu.be/").pop().split("?")[0].trim();
+            return "https://youtube.com" + videoId;
+        }
+    }
+
+    // 3. YouTube Standard Watch Link Fix (Converts watch?v= to /embed/)
+    if (text.includes("://youtube.com")) {
+        var startIndex = text.indexOf("http");
+        if (startIndex !== -1) {
+            var remainingText = text.substring(startIndex);
+            var endIndex = remainingText.search(/[\s"'>]/);
+            var cleanUrl = endIndex !== -1 ? remainingText.substring(0, endIndex) : remainingText;
+            
+            // Extract the video ID after the v= parameter
+            var videoId = cleanUrl.split("v=").pop().split("&")[0].trim();
+            return "https://youtube.com" + videoId;
+        }
+    }
+
     return null;
 }
 
@@ -148,7 +165,7 @@ function createPost() {
     var post = document.createElement('div');
     post.className = 'post';
 
-    // The text display remains exactly what the user typed into the box
+    // The text on the post remains exactly what the user typed (retains the original URL text)
     var postTextDiv = document.createElement('div');
     postTextDiv.className = 'post-text';
     postTextDiv.textContent = text;
