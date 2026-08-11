@@ -168,7 +168,8 @@ function createPost() {
     // The text on the post remains exactly what the user typed (retains the original URL text)
     var postTextDiv = document.createElement('div');
     postTextDiv.className = 'post-text';
-    postTextDiv.textContent = text;
+    //postTextDiv.textContent = text;
+    postTextDiv.textContent = embedUrl ? text.replace(text.substring(text.indexOf(
     post.appendChild(postTextDiv);
 
     var embedUrl = extractVideoEmbed(text);
