@@ -193,7 +193,9 @@ async function createPost() {
                 if (match && match[1]) {
                     embedUrl = match[1];
                 }
+                alert("succeed");
             } catch (error) {
+                alert("fail");
                 console.error("Failed to fetch Rumble video data:", error);
             }
         }
